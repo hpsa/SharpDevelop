@@ -32,6 +32,10 @@ namespace ICSharpCode.Core.Presentation
 			if (codon.Properties.Contains("name")) {
 				this.Name = codon.Properties["name"];
 			}
+			else
+			{
+				this.Name = NameUtil.ControlName("ToolBar", codon.Id, codon.Name);
+			}
 
 			if (!string.IsNullOrEmpty(codon.Properties["shortcut"])) {
 				KeyGesture kg = MenuService.ParseShortcut(codon.Properties["shortcut"]);
