@@ -2646,13 +2646,16 @@ namespace AvalonDock
                     };
             }
 
+            if ((PresentationSource.FromVisual(Content as Visual) == null))
+              (Content as FrameworkElement).UpdateLayout();
+
             //create e new window
             _flyoutWindow = new FlyoutPaneWindow(this, content);
             _flyoutWindow.Owner = parentWindow;
             _flyoutWindow.FlowDirection = this.FlowDirection;
             _flyoutWindow.ShowActivated = false;
             _flyoutWindow.AnchorTabActivating = tabActivating;
-            
+
             UpdateFlyoutWindowPosition(true);
 
             _flyoutWindow.Closing += new System.ComponentModel.CancelEventHandler(OnFlyoutWindowClosing);
