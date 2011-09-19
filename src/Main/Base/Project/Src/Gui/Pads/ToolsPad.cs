@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using System.Windows.Controls;
 using ICSharpCode.Core;
+using System.Collections.Generic;
+using Internal.Doozers;
 
 namespace ICSharpCode.SharpDevelop.Gui
 {
@@ -14,6 +16,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 	public class ToolsPad : AbstractPadContent
 	{
 		private ContentPresenter contentControl = new ContentPresenter();
+		private Dictionary<string, ToolsPadDescriptor> _descriptors;
 		
 		public override object Control
 		{
@@ -22,6 +25,16 @@ namespace ICSharpCode.SharpDevelop.Gui
 		
 		public ToolsPad()
 		{
+			_descriptors = new Dictionary<string, ToolsPadDescriptor>();
+			List<ToolsPadDescriptor> descriptors = AddInTree.BuildItems<ToolsPadDescriptor>("/SharpDevelop/Workbench/ToolBoxContent", this);
+			foreach (ToolsPadDescriptor descriptor in descriptors)
+			{
+				if (descriptor.Holder != null && !_descriptors.ContainsKey(descriptor.Holder))
+				{
+					_descriptors.Add(descriptor.Holder, descriptor);
+				}
+			}
+
 			WorkbenchSingleton.Workbench.ActiveViewContentChanged += WorkbenchActiveContentChanged;
 			WorkbenchActiveContentChanged(null, null);
 		}
@@ -37,10 +50,10 @@ namespace ICSharpCode.SharpDevelop.Gui
 			if (viewContent != null)
 			{
 				Type holderType = viewContent.GetType();
-				var node = AddInTree.GetTreeNode("/SharpDevelop/Workbench/ToolBoxContent", false);
-				var toolBoxCodon = node.Codons.Where(codon => codon.Properties["holder"].Equals(holderType.FullName)).FirstOrDefault();
-				if (toolBoxCodon != null)
-					return toolBoxCodon.BuildItem(null, null);
+				if (_descriptors.ContainsKey(holderType.FullName))
+				{
+					return _descriptors[holderType.FullName].GetToolBoxContent();
+				}
 			}
 		
 			return StringParser.Parse("${res:SharpDevelop.SideBar.NoToolsAvailableForCurrentDocument}");;
