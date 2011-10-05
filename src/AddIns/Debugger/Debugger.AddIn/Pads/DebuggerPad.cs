@@ -32,20 +32,37 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 				this.panel.Children.Add(toolbar);
 			}
 			
-			// logic
-			debugger = (WindowsDebugger)DebuggerService.CurrentDebugger;
-			
 			InitializeComponents();
 			
-			debugger.ProcessSelected += delegate(object sender, ProcessEventArgs e) {
-				SelectProcess(e.Process);
-			};
-			SelectProcess(debugger.DebuggedProcess);
+			DebuggerService.CurrentDebuggerChanged += OnDebuggerChanged;
+			OnDebuggerChanged(null, null);
+		}
+		
+		protected virtual void OnDebuggerChanged(object sender, System.EventArgs e)
+		{
+			if (debugger != null)
+			{
+				debugger.ProcessSelected -= OnSelectedProcess;
+			}
+			
+			debugger = (WindowsDebugger) DebuggerService.CurrentDebugger;
+			
+			if (debugger != null)
+			{
+				debugger.ProcessSelected += OnSelectedProcess;
+				SelectProcess(debugger.DebuggedProcess);
+				RefreshPad();
+			}
 		}
 		
 		protected virtual void InitializeComponents()
 		{
 			
+		}
+		
+		protected virtual void OnSelectedProcess(object sender, ProcessEventArgs args)
+		{
+			SelectProcess(args.Process);
 		}
 		
 		protected virtual void SelectProcess(Process process)

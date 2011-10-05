@@ -125,7 +125,7 @@ namespace ICSharpCode.SharpDevelop.Services
 			}
 		}
 		
-		public bool CanDebug(IProject project)
+		public virtual bool CanDebug(IProject project)
 		{
 			return true;
 		}

@@ -94,12 +94,26 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 		
 		public ConsolePad()
 		{
-			WindowsDebugger debugger = (WindowsDebugger)DebuggerService.CurrentDebugger;
+			DebuggerService.CurrentDebuggerChanged += OnDebuggerChanged;
+		}
+		
+		private WindowsDebugger debugger;
+		protected virtual void OnDebuggerChanged(object sender, System.EventArgs e)
+		{
+			if (debugger != null)
+			{
+				debugger.ProcessSelected -= OnSelectedProcess;
+			}
 			
-			debugger.ProcessSelected += delegate(object sender, ProcessEventArgs e) {
-				this.Process = e.Process;
-			};
+			debugger = (WindowsDebugger) DebuggerService.CurrentDebugger;
+			debugger.ProcessSelected += OnSelectedProcess;
+			
 			this.Process = debugger.DebuggedProcess;
+		}
+		
+		protected virtual void OnSelectedProcess(object sender, ProcessEventArgs args)
+		{
+			this.Process = args.Process;
 		}
 		
 		protected override void AbstractConsolePadTextEntered(object sender, TextCompositionEventArgs e)

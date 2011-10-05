@@ -21,12 +21,13 @@ namespace ICSharpCode.SharpDevelop.Debugging
 		static IDebugger   currentDebugger;
 		static DebuggerDescriptor[] debuggers;
 		static string      oldLayoutConfiguration = "Default";
+		
+		public static event EventHandler CurrentDebuggerChanged;
 
 		static DebuggerService()
 		{
-			ProjectService.SolutionLoaded += delegate {
-				ClearDebugMessages();
-			};
+			ProjectService.SolutionLoaded += OnSolutionLoaded;
+			ProjectService.SolutionClosing += OnSolutionClosing;
 			
 			ProjectService.BeforeSolutionClosing += OnBeforeSolutionClosing;
 			
@@ -61,14 +62,10 @@ namespace ICSharpCode.SharpDevelop.Debugging
 		/// just want to check a property like IsDebugging, check <see cref="IsDebuggerLoaded"/>
 		/// before using this property.
 		/// </summary>
-		public static IDebugger CurrentDebugger {
-			get {
-				if (currentDebugger == null) {
-					currentDebugger = GetCompatibleDebugger();
-					currentDebugger.DebugStarting += new EventHandler(OnDebugStarting);
-					currentDebugger.DebugStarted += new EventHandler(OnDebugStarted);
-					currentDebugger.DebugStopped += new EventHandler(OnDebugStopped);
-				}
+		public static IDebugger CurrentDebugger 
+		{
+			get 
+			{
 				return currentDebugger;
 			}
 		}
@@ -137,6 +134,9 @@ namespace ICSharpCode.SharpDevelop.Debugging
 			LayoutConfiguration.CurrentLayoutName = oldLayoutConfiguration;
 			if (DebugStopped != null)
 				DebugStopped(null, e);
+			
+			// Report debug change in case debugger changed during debugging
+			OnStartupProjectChanged(null, EventArgs.Empty);
 		}
 		
 		static MessageViewCategory debugCategory = null;
@@ -245,6 +245,47 @@ namespace ICSharpCode.SharpDevelop.Debugging
 					e.Cancel = true;
 				}
 			}
+		}
+		
+		static void OnSolutionLoaded(object o, EventArgs args)
+		{
+			ClearDebugMessages();
+			ProjectService.OpenSolution.Preferences.StartupProjectChanged += OnStartupProjectChanged;
+			OnStartupProjectChanged(null, null);
+		}
+		
+		static void OnSolutionClosing(object o, EventArgs args)
+		{
+			ProjectService.OpenSolution.Preferences.StartupProjectChanged -= OnStartupProjectChanged;
+		}
+		
+		static void OnStartupProjectChanged(object o, EventArgs args)
+		{
+			// Do not change running debugger (update & notify when debugging will stop)
+			if (currentDebugger != null && currentDebugger.IsDebugging)
+				return; 
+		
+			var queryCurrentDebugger = GetCompatibleDebugger();
+			
+			if (currentDebugger == queryCurrentDebugger)
+				return;
+			
+			// Current Debugger changed
+			if (currentDebugger != null)
+			{
+				currentDebugger.DebugStarting -= OnDebugStarting;
+				currentDebugger.DebugStarted -= OnDebugStarted;
+				currentDebugger.DebugStopped -= OnDebugStopped;
+			}
+			
+			currentDebugger = queryCurrentDebugger;
+			currentDebugger.DebugStarting += OnDebugStarting;
+			currentDebugger.DebugStarted += OnDebugStarted;
+			currentDebugger.DebugStopped += OnDebugStopped;
+			
+			// Report changed
+			if (CurrentDebuggerChanged != null)
+				CurrentDebuggerChanged(null, null);
 		}
 		
 		public static void ToggleBreakpointAt(ITextEditor editor, int lineNumber)
