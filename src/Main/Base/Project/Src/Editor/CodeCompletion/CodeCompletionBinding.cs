@@ -121,6 +121,30 @@ namespace ICSharpCode.SharpDevelop.Editor.CodeCompletion
 			}
 			return false;
 		}
+		
+		public Codon Codon
+		{
+			get {
+				return codon;
+			}
+		}
+		
+		public System.Collections.ObjectModel.ReadOnlyCollection<string> Extensions
+		{
+			get {
+				return Array.AsReadOnly<string>(extensions);
+			}
+		}
+		
+		public ICodeCompletionBinding Binding
+		{
+			get {
+				return binding;
+			}
+			set {
+				binding = value;
+			}
+		}
 	}
 	
 	public class DefaultCodeCompletionBinding : ICodeCompletionBinding
