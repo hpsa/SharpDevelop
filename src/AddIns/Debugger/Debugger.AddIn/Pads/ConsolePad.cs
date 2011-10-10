@@ -95,6 +95,7 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 		public ConsolePad()
 		{
 			DebuggerService.CurrentDebuggerChanged += OnDebuggerChanged;
+			OnDebuggerChanged(null, null);
 		}
 		
 		private WindowsDebugger debugger;
