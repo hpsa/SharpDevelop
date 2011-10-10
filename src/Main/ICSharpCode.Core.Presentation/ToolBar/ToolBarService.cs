@@ -96,23 +96,6 @@ namespace ICSharpCode.Core.Presentation
 			return tb;
 		}
 		
-		sealed class CoreToolBar : ToolBar, IWeakEventListener
-		{
-			public CoreToolBar()
-			{
-				LanguageChangeWeakEventManager.AddListener(this);
-			}
-			
-			bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
-			{
-				if (managerType == typeof(LanguageChangeWeakEventManager)) {
-					MenuService.UpdateText(this.ItemsSource);
-					return true;
-				}
-				return false;
-			}
-		}
-		
 		public static ToolBar CreateToolBar(UIElement inputBindingOwner, object owner, string addInTreePath)
 		{
 			return CreateToolBar(inputBindingOwner, owner, AddInTree.GetTreeNode(addInTreePath));
@@ -184,6 +167,24 @@ namespace ICSharpCode.Core.Presentation
 		}
 	}
 
+	public sealed class CoreToolBar : ToolBar, IWeakEventListener
+	{
+		public CoreToolBar()
+		{
+			LanguageChangeWeakEventManager.AddListener(this);
+		}
+		
+		bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+		{
+			if (managerType == typeof(LanguageChangeWeakEventManager))
+			{
+				MenuService.UpdateText(this.ItemsSource);
+				return true;
+			}
+			return false;
+		}
+	}
+	
 	public interface IToolBarItemBuilder
 	{
 		void Initialize(UIElement inputBindingOwner, Codon codon, object owner);
