@@ -11,7 +11,7 @@ namespace ICSharpCode.Core.Presentation
 	/// <summary>
 	/// A tool bar button based on the AddIn-tree.
 	/// </summary>
-	sealed class ToolBarSplitButton : SplitButton, IStatusUpdate
+	public sealed class ToolBarSplitButton : SplitButton, IStatusUpdate
 	{
 		ICommand menuCommand;
 		object caller;
