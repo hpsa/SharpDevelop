@@ -45,10 +45,9 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 				debugger.ProcessSelected -= OnSelectedProcess;
 			}
 			
-			debugger = (WindowsDebugger) DebuggerService.CurrentDebugger;
-			
-			if (debugger != null)
+			if (DebuggerService.CurrentDebugger != null && DebuggerService.CurrentDebugger is WindowsDebugger)
 			{
+				debugger = (WindowsDebugger) DebuggerService.CurrentDebugger;
 				debugger.ProcessSelected += OnSelectedProcess;
 				SelectProcess(debugger.DebuggedProcess);
 				RefreshPad();

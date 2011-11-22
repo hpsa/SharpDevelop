@@ -106,10 +106,13 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 				debugger.ProcessSelected -= OnSelectedProcess;
 			}
 			
-			debugger = (WindowsDebugger) DebuggerService.CurrentDebugger;
-			debugger.ProcessSelected += OnSelectedProcess;
-			
-			this.Process = debugger.DebuggedProcess;
+			if (DebuggerService.CurrentDebugger != null && DebuggerService.CurrentDebugger is WindowsDebugger)
+			{
+				debugger = (WindowsDebugger)DebuggerService.CurrentDebugger;
+				debugger.ProcessSelected += OnSelectedProcess;
+				
+				this.Process = debugger.DebuggedProcess;
+			}
 		}
 		
 		protected virtual void OnSelectedProcess(object sender, ProcessEventArgs args)
