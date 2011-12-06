@@ -8590,4 +8590,13 @@ Error while starting:
     <value>This resource is not being used. Its purpose is to test the translation database and has 
 a line break</value>
   </data>
+  <data name="Dialog.SelectReferenceDialog.GacReferencePanel.cancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog.SelectReferenceDialog.GacReferencePanel.filterTextBox" xml:space="preserve">
+    <value>Search by type name</value>
+  </data>
+  <data name="Dialog.SelectReferenceDialog.GacReferencePanel.searchButton" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

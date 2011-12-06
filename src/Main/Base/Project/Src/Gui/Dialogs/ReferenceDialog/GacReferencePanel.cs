@@ -105,9 +105,9 @@ namespace ICSharpCode.SharpDevelop.Gui
 			};
 			
 			filterTextBox = new TextBox { Width = 100, Dock = DockStyle.Right };
-			searchButton = new Button { Dock = DockStyle.Right, Width = 50, Text = "Search" };
+			searchButton = new Button { Dock = DockStyle.Right, Width = 50, Text = "${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}" };
 			toolTip.SetToolTip(searchButton, searchButton.Text);
-			filterTextboxToolTip.SetToolTip(filterTextBox, "Search by type name");
+			filterTextboxToolTip.SetToolTip(filterTextBox, "${res:Dialog.SelectReferenceDialog.GacReferencePanel.filterTextBox}");
 			searchButton.Click += searchButton_Click;
 			upperPanel.Controls.Add(chooseSpecificVersionCheckBox);
 			upperPanel.Controls.Add(filterTextBox);
@@ -142,11 +142,11 @@ namespace ICSharpCode.SharpDevelop.Gui
 			if(!worker.IsBusy) {			
 				filterTextBox.ReadOnly = true;
 				worker.RunWorkerAsync();
-				text = "Cancel";
+				text = "${res:Dialog.SelectReferenceDialog.GacReferencePanel.cancelButton}";
 			}
 			else {
 				worker.CancelAsync();
-				text = "Search";
+				text = "${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}";
 				filterTextBox.ReadOnly = false;
 			}
 			searchButton.Text = text;
@@ -159,7 +159,8 @@ namespace ICSharpCode.SharpDevelop.Gui
 				// avoid crash when dialog is closed before search is completed
 				return;
 			}
-			searchButton.Text = "Search"; this.toolTip.SetToolTip(searchButton, searchButton.Text);
+			searchButton.Text = "${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}"; 
+			this.toolTip.SetToolTip(searchButton, searchButton.Text);
 			filterTextBox.ReadOnly = false;
 			if (resultList != null && resultList.Count > 0) {
 				listView.Items.Clear();				

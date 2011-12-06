@@ -19,6 +19,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			this.selectDialog = selectDialog;
 			
 			Button browseButton   = new Button();
+			browseButton.Name     = "browseButton";
 			browseButton.Location = new Point(10, 10);
 			
 			browseButton.Text     = StringParser.Parse("${res:Global.BrowseButtonText}");
