@@ -472,6 +472,10 @@ namespace ICSharpCode.AvalonEdit.AddIn
 				return;
 			
 			AdornerLayer layer = AdornerLayer.GetAdornerLayer(textArea.TextView);
+			
+			if (layer == null)
+				return;
+			
 			CaretHighlightAdorner adorner = new CaretHighlightAdorner(textArea);
 			layer.Add(adorner);
 			
