@@ -590,6 +590,9 @@ namespace ICSharpCode.SharpDevelop.Project
 				using (IProgressMonitor nestedProgressMonitor = progressMonitor.CreateSubTask(1.0 / projectsToLoad.Count)) {
 					loadInfo.ProgressMonitor = nestedProgressMonitor;
 					IProject newProject = ProjectBindingService.LoadProject(loadInfo);
+					if (newProject == null) {
+						continue;
+					}
 					newProject.IdGuid = loadInfo.Guid;
 					newProject.ProjectSections.AddRange(projectSections);
 					newSolution.AddFolder(newProject);
