@@ -53,6 +53,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 		Button searchButton;
 		ToolTip toolTip = new ToolTip();
 		ToolTip filterTextboxToolTip = new ToolTip();
+		ToolTip chooseSpecificVersionTooltip = new ToolTip();
 		ISelectReferenceDialog selectDialog;
 		ColumnSorter sorter;
 		BackgroundWorker worker;
@@ -95,6 +96,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			chooseSpecificVersionCheckBox.Dock = DockStyle.Left;
 			chooseSpecificVersionCheckBox.AutoSize = true;
 			chooseSpecificVersionCheckBox.Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersion}");
+			chooseSpecificVersionTooltip.SetToolTip(chooseSpecificVersionCheckBox, StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersionTooltip}"));
 			
 			chooseSpecificVersionCheckBox.CheckedChanged += delegate {
 				listView.Items.Clear();

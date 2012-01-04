@@ -337,7 +337,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			// selectButton
 			// 
 			this.selectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.selectButton.Location = new System.Drawing.Point(488, 32);
+			this.selectButton.Location = new System.Drawing.Point(486, 30);
 			this.selectButton.Name = "selectButton";
 			this.selectButton.Size = new System.Drawing.Size(75, 23);
 			this.selectButton.TabIndex = 1;
@@ -347,7 +347,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			// removeButton
 			// 
 			this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.removeButton.Location = new System.Drawing.Point(488, 256);
+			this.removeButton.Location = new System.Drawing.Point(486, 265);
 			this.removeButton.Name = "removeButton";
 			this.removeButton.Size = new System.Drawing.Size(75, 23);
 			this.removeButton.TabIndex = 4;
@@ -368,7 +368,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			// 
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.Location = new System.Drawing.Point(395, 368);
+			this.okButton.Location = new System.Drawing.Point(405, 368);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 5;
@@ -379,7 +379,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			// 
 			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(483, 368);
+			this.cancelButton.Location = new System.Drawing.Point(486, 368);
 			this.cancelButton.Name = "cancelButton";
 			this.cancelButton.Size = new System.Drawing.Size(75, 23);
 			this.cancelButton.TabIndex = 6;
@@ -412,6 +412,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 			this.MinimumSize = new System.Drawing.Size(280, 350);
 			this.Name = "SelectReferenceDialog";
 			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "${res:Dialog.SelectReferenceDialog.DialogName}";
 			this.referenceTabControl.ResumeLayout(false);
 			this.ResumeLayout(false);
