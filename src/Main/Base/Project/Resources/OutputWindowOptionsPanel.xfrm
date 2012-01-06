@@ -22,9 +22,9 @@
         <Controls>
           <System.Windows.Forms.CheckBox>
             <Name value="wordWrapCheckBox" />
-            <Location value="{X=8,Y=34}" />
+            <Location value="{X=8,Y=20}" />
             <Checked value="True" />
-            <Size value="{Width=368, Height=16}" />
+            <Size value="{Width=368, Height=24}" />
             <Text value="${res:Dialog.Options.IDEOptions.OutputPanel.WordWrap}" />
             <CheckState value="Checked" />
             <Anchor value="Top, Left, Right" />
