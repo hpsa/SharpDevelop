@@ -18,6 +18,8 @@ namespace ICSharpCode.SharpDevelop.Gui
 		private ContentPresenter contentControl = new ContentPresenter();
 		private Dictionary<string, ToolsPadDescriptor> _descriptors;
 		
+		private const String DefaultHolderType = "Default";
+		
 		public override object Control
 		{
 			get { return contentControl; }
@@ -56,7 +58,9 @@ namespace ICSharpCode.SharpDevelop.Gui
 				}
 			}
 		
-			return StringParser.Parse("${res:SharpDevelop.SideBar.NoToolsAvailableForCurrentDocument}");;
+			return _descriptors.ContainsKey(DefaultHolderType) ?
+					_descriptors[DefaultHolderType].GetToolBoxContent() :
+					StringParser.Parse("${res:SharpDevelop.SideBar.NoToolsAvailableForCurrentDocument}");
 		}
 	}
 }
