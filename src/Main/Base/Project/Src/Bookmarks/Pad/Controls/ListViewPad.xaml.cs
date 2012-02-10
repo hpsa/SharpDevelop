@@ -95,10 +95,7 @@ namespace ICSharpCode.SharpDevelop.Bookmarks.Pad.Controls
 				return null;
 			
 			foreach (var model in itemCollection) {
-				SDBookmark currentBookmark = model.Mark as SDBookmark;
-				
-				if (bookmark.FileName == currentBookmark.FileName &&
-				    bookmark.LineNumber == currentBookmark.LineNumber) {
+				if (bookmark == model.Mark) {
 					ItemCollection.Remove(model);
 					return model;
 				}
