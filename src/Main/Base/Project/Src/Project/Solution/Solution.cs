@@ -173,6 +173,10 @@ namespace ICSharpCode.SharpDevelop.Project
 		#endregion
 		
 		#region Properties
+		public IProjectChangeWatcher ChangeWatcher {
+			get { return changeWatcher; }
+		}
+		
 		[Browsable(false)]
 		public bool HasProjects {
 			get {

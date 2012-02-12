@@ -155,6 +155,13 @@ namespace ICSharpCode.SharpDevelop.Project
 		}
 		
 		/// <summary>
+		/// Returns the Change Watcher of the project (may be null if not initialized)
+		/// </summary>
+		public IProjectChangeWatcher Watcher{
+			get { return watcher; }
+		}
+		
+		/// <summary>
 		/// True if the file that contains the project is readonly.
 		/// </summary>
 		[ReadOnly(true)]
