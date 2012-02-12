@@ -2179,7 +2179,10 @@ namespace AvalonDock
 
                     var mainWindow = Window.GetWindow(this);
                     if (mainWindow.IsVisible)
+                    {
                         floatingWindow.Owner = mainWindow;
+                        floatingWindow.InputBindings.AddRange(mainWindow.InputBindings);
+                    }
 
                     //floatingWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                     //if (content.Content != null)
@@ -2875,6 +2878,7 @@ namespace AvalonDock
                 var floatingWindow = new DockableFloatingWindow(this);
                 floatingWindow.Content = dockableContent;
                 floatingWindow.Owner = Window.GetWindow(this);
+                floatingWindow.InputBindings.AddRange(floatingWindow.Owner.InputBindings);
                 Drag(floatingWindow, point, offset);
             }
         }
@@ -2887,6 +2891,7 @@ namespace AvalonDock
                 var floatingWindow = new DockableFloatingWindow(this);
                 floatingWindow.Content = dockablePane;
                 floatingWindow.Owner = Window.GetWindow(this);
+                floatingWindow.InputBindings.AddRange(floatingWindow.Owner.InputBindings);
                 Drag(floatingWindow, point, offset);
             }
         }
@@ -3861,6 +3866,7 @@ namespace AvalonDock
                     flWindow.Width = size.Width;
                     flWindow.Height = size.Height;
                     flWindow.Owner = Window.GetWindow(this);
+                    flWindow.InputBindings.AddRange(flWindow.Owner.InputBindings);
 
                     flWindow.IsDockableWindow = isDockableWindow;
                     flWindow.ShowActivated = false;
