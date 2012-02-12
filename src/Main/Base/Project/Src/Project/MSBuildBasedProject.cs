@@ -1247,7 +1247,7 @@ namespace ICSharpCode.SharpDevelop.Project
 		public override void Save(string fileName)
 		{
 			lock (SyncRoot) {
-				watcher.Disable();
+				watcher.Pause();
 				watcher.Rename(fileName);
 				// we need the global lock - if the file is being renamed,
 				// MSBuild will update the global project collection
@@ -1259,7 +1259,7 @@ namespace ICSharpCode.SharpDevelop.Project
 						userProjectFile.Save(userFile);
 					}
 				}
-				watcher.Enable();
+				watcher.Restore();
 			}
 			FileUtility.RaiseFileSaved(new FileNameEventArgs(fileName));
 		}

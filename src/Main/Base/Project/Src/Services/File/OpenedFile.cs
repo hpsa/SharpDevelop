@@ -486,13 +486,16 @@ namespace ICSharpCode.SharpDevelop
 		
 		public override void SaveToDisk()
 		{
+			bool fileChangeWatcherState = false;
 			try {
-				if (fileChangeWatcher != null)
+				if (fileChangeWatcher != null) {
+					fileChangeWatcherState = fileChangeWatcher.Enabled;
 					fileChangeWatcher.Enabled = false;
+				}
 				base.SaveToDisk();
 			} finally {
 				if (fileChangeWatcher != null)
-					fileChangeWatcher.Enabled = true;
+					fileChangeWatcher.Enabled = fileChangeWatcherState;
 			}
 		}
 		

@@ -12,6 +12,14 @@ namespace ICSharpCode.SharpDevelop.Project
 		void Enable();
 		void Disable();
 		void Rename(string newFileName);
+		/// <summary>
+		/// Pauses (disables) the change watcher and remembers the last state it was in for the Restore method.
+		/// </summary>
+		void Pause();
+		/// <summary>
+		/// Restores the change watcher to the state it was when calling Pause or does nothing if no such call was made
+		/// </summary>
+		void Restore();
 	}
 	
 	public sealed class MockProjectChangeWatcher : IProjectChangeWatcher
@@ -29,6 +37,14 @@ namespace ICSharpCode.SharpDevelop.Project
 		}
 		
 		public void Dispose()
+		{
+		}
+		
+		public void Pause()
+		{
+		}
+		
+		public void Restore()
 		{
 		}
 	}

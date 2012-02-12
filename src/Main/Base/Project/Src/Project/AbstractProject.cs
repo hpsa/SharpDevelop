@@ -142,9 +142,9 @@ namespace ICSharpCode.SharpDevelop.Project
 					watcher = new ProjectChangeWatcher(value);
 					watcher.Enable();
 				} else {
-					watcher.Disable();
+					watcher.Pause();
 					watcher.Rename(value);
-					watcher.Enable();
+					watcher.Restore();
 				}
 				
 				lock (SyncRoot) { // locking still required for Directory

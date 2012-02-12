@@ -186,10 +186,10 @@ namespace ICSharpCode.SharpDevelop.Project
 				return fileName;
 			}
 			set {
-				changeWatcher.Disable();
+				changeWatcher.Pause();
 				fileName = value;
 				changeWatcher.Rename(fileName);
-				changeWatcher.Enable();
+				changeWatcher.Restore();
 			}
 		}
 		
@@ -294,9 +294,9 @@ namespace ICSharpCode.SharpDevelop.Project
 		public void Save()
 		{
 			try {
-				changeWatcher.Disable();
+				changeWatcher.Pause();
 				Save(fileName);
-				changeWatcher.Enable();
+				changeWatcher.Restore();
 			} catch (IOException ex) {
 				MessageService.ShowErrorFormatted("${res:SharpDevelop.Solution.CannotSave.IOException}", fileName, ex.Message);
 			} catch (UnauthorizedAccessException ex) {
@@ -314,7 +314,7 @@ namespace ICSharpCode.SharpDevelop.Project
 		
 		public void Save(string fileName)
 		{
-			changeWatcher.Disable();
+			changeWatcher.Pause();
 			changeWatcher.Rename(fileName);
 			this.fileName = fileName;
 			UpdateMSBuildProperties();
@@ -428,7 +428,7 @@ namespace ICSharpCode.SharpDevelop.Project
 				
 				sw.WriteLine("EndGlobal");
 			}
-			changeWatcher.Enable();
+			changeWatcher.Restore();
 		}
 		
 		static void SaveProjectSections(IEnumerable<ProjectSection> sections, StringBuilder projectSection)
