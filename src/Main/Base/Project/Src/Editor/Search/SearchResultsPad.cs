@@ -51,6 +51,14 @@ namespace ICSharpCode.SharpDevelop.Editor.Search
 			};
 		}
 		
+		private void DisplayDefaultToolBarItems()
+		{
+			foreach (object toolBarItem in defaultToolbarItems)
+			{
+				toolBar.Items.Add(toolBarItem);
+			}
+		}
+		
 		public override object Control {
 			get {
 				return dockPanel;
@@ -67,6 +75,8 @@ namespace ICSharpCode.SharpDevelop.Editor.Search
 		{
 			lastSearches.Clear();
 			contentPlaceholder.SetContent(null);
+			toolBar.Items.Clear();
+			DisplayDefaultToolBarItems();
 		}
 		
 		public void ShowSearchResults(ISearchResult result)
