@@ -1009,6 +1009,12 @@ SharpDevelop can collect this information and upload it automatically.</value>
   <data name="AvalonEdit.FileEncoding.EncodingCausesDataLoss.UseUTF8" xml:space="preserve">
     <value>Save as UTF-8</value>
   </data>
+  <data name="AvalonEdit.NewLineConsistencyCheck.Title" xml:space="preserve">
+    <value>Inconsistent NewLines</value>
+  </data>
+  <data name="AvalonEdit.NewLineConsistencyCheck.Description" xml:space="preserve">
+    <value>This file contains inconsistent newlines.</value>
+  </data>
   <data name="BackendBindings.ExecutionManager.CantExecuteDLLError" xml:space="preserve">
     <value>Project is configured as dll and no execution command is specified.
 You can specifiy an execution command in the project options.</value>
@@ -3544,6 +3550,9 @@ You can also choose to store the setting in the .user-file instead of the projec
   </data>
   <data name="Global.No" xml:space="preserve">
     <value>No</value>
+  </data>
+  <data name="Global.NormalizeButtonText" xml:space="preserve">
+    <value>Normalize</value>
   </data>
   <data name="Global.OKButtonText" xml:space="preserve">
     <value>OK</value>
