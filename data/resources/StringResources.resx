@@ -8611,4 +8611,8 @@ a line break</value>
   <data name="Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersionTooltip" xml:space="preserve">
     <value>List all the available versions of each assembly</value>
   </data>
+  <data name="ICSharpCode.Core.Services.ErrorLoadProperty" xml:space="preserve">
+    <value>An unexpected error occurred when loading property:"{0}". Details: {1}</value>
+    <comment>Error message when loading property fail</comment>
+  </data>
 </root>

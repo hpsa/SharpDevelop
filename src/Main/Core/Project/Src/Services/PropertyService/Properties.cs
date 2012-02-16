@@ -333,7 +333,7 @@ namespace ICSharpCode.Core
 					try {
 						o = c.ConvertFromInvariantString(o.ToString());
 					} catch (Exception ex) {
-						MessageService.ShowWarning("Error loading property '" + property + "': " + ex.Message);
+						MessageService.ShowWarning(string.Format(ResourceService.GetString("ICSharpCode.Core.Services.ErrorLoadProperty"), property, ex.Message));
 						o = defaultValue;
 					}
 					properties[property] = o; // store for future look up
@@ -350,7 +350,7 @@ namespace ICSharpCode.Core
 						}
 						o = arr;
 					} catch (Exception ex) {
-						MessageService.ShowWarning("Error loading property '" + property + "': " + ex.Message);
+						MessageService.ShowWarning(string.Format(ResourceService.GetString("ICSharpCode.Core.Services.ErrorLoadProperty"), property, ex.Message));
 						o = defaultValue;
 					}
 					properties[property] = o; // store for future look up
@@ -365,7 +365,7 @@ namespace ICSharpCode.Core
 					try {
 						o = ((SerializedValue)o).Deserialize<T>();
 					} catch (Exception ex) {
-						MessageService.ShowWarning("Error loading property '" + property + "': " + ex.Message);
+						MessageService.ShowWarning(string.Format(ResourceService.GetString("ICSharpCode.Core.Services.ErrorLoadProperty"), property, ex.Message));
 						o = defaultValue;
 					}
 					properties[property] = o; // store for future look up
