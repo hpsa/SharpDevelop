@@ -2865,6 +2865,7 @@ namespace AvalonDock
             {
                 DocumentFloatingWindow floatingWindow = new DocumentFloatingWindow(this);
                 floatingWindow.Content = documentContent;
+                floatingWindow.InputBindings.AddRange(Window.GetWindow(this).InputBindings);
                 Drag(floatingWindow, point, offset);
             }
 
