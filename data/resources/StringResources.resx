@@ -5055,6 +5055,10 @@ Only letters, digits, space, '.' or '_' are allowed.</value>
   <data name="ICSharpCode.SharpDevelop.LoadingFile" xml:space="preserve">
     <value>Loading ${Filename}...</value>
   </data>
+  <data name="ICSharpCode.SharpDevelop.Project.LoadingSolution" xml:space="preserve">
+    <value>Loading Solution</value>
+    <comment>Title for Loading Solution dialog</comment>
+  </data>
   <data name="ICSharpCode.SharpDevelop.Project.KeepOldSolution" xml:space="preserve">
     <value>Keep old solution open</value>
     <comment>Button text to keep old solution open</comment>

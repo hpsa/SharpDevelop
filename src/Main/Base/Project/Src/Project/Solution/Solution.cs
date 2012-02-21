@@ -496,7 +496,7 @@ namespace ICSharpCode.SharpDevelop.Project
 						return false;
 				}
 				
-				using (AsynchronousWaitDialog waitDialog = AsynchronousWaitDialog.ShowWaitDialog("Loading solution")) {
+				using (AsynchronousWaitDialog waitDialog = AsynchronousWaitDialog.ShowWaitDialog(ResourceService.GetString("ICSharpCode.SharpDevelop.Project.LoadingSolution"))) {
 					nestedProjectsSection = SetupSolutionLoadSolutionProjects(newSolution, sr, waitDialog);
 				}
 			}
@@ -590,7 +590,8 @@ namespace ICSharpCode.SharpDevelop.Project
 				
 				loadInfo.ProgressMonitor = progressMonitor;
 				progressMonitor.Progress = (double)i / projectsToLoad.Count;
-				progressMonitor.TaskName = "Loading " + loadInfo.ProjectName;
+				progressMonitor.TaskName = StringParser.Parse("${res:ICSharpCode.SharpDevelop.LoadingFile}",
+				                                              new StringTagPair("Filename", loadInfo.ProjectName));
 				
 				using (IProgressMonitor nestedProgressMonitor = progressMonitor.CreateSubTask(1.0 / projectsToLoad.Count)) {
 					loadInfo.ProgressMonitor = nestedProgressMonitor;
