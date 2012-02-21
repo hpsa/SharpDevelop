@@ -264,7 +264,10 @@ namespace ICSharpCode.SharpDevelop
 			IViewContent viewContent = GetOpenFile(fileName);
 			if (viewContent != null) {
 				if (switchToOpenedView) {
-					viewContent.WorkbenchWindow.SelectWindow();
+					IViewContent activeViewContent = WorkbenchSingleton.Workbench.ActiveViewContent; 
+					if (viewContent != activeViewContent) {
+						viewContent.WorkbenchWindow.SelectWindow();
+					}
 				}
 				return viewContent;
 			}
