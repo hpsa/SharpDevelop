@@ -4931,6 +4931,10 @@ Only letters, digits, space, '.' or '_' are allowed.</value>
     <value>Parsing</value>
     <comment>Status bar message indicating that SharpDevelop is parsing the user code</comment>
   </data>
+  <data name="ICSharpCode.SharpDevelop.Internal.ParserService.ParsingProject" xml:space="preserve">
+    <value>Parsing ${ProjectName} ...</value>
+    <comment>Status bar message indicating that SharpDevelop is parsing the project</comment>
+  </data>
   <data name="ICSharpCode.SharpDevelop.Internal.Project.ProjectFile.BuildAction" xml:space="preserve">
     <value>Build action</value>
   </data>

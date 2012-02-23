@@ -148,7 +148,7 @@ namespace ICSharpCode.SharpDevelop
 		
 		static string GetParseTaskTitle(string projectName)
 		{
-			return StringParser.Parse("${res:ICSharpCode.SharpDevelop.Internal.ParserService.Parsing} ")  + projectName + "...";
+			return StringParser.Parse("${res:ICSharpCode.SharpDevelop.Internal.ParserService.ParsingProject}", new StringTagPair("ProjectName", projectName));
 		}
 		
 		internal static void InitNewProject(ParseProjectContent pc)
