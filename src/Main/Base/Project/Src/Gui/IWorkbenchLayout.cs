@@ -38,6 +38,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 		
 		event EventHandler ActiveWorkbenchWindowChanged;
 		event EventHandler ActiveContentChanged;
+		event EventHandler PadActivated;
 		
 		/// <summary>
 		/// Attaches this layout manager to a workbench object.

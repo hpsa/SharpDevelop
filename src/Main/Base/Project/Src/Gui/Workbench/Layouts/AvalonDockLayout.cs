@@ -200,6 +200,8 @@ namespace ICSharpCode.SharpDevelop.Gui
 			}
 		}
 		
+		public event EventHandler PadActivated;
+		
 		public void ActivatePad(PadDescriptor padDescriptor)
 		{
 			AvalonPadContent p;
@@ -210,6 +212,9 @@ namespace ICSharpCode.SharpDevelop.Gui
 			} else {
 				ShowPad(padDescriptor);
 			}
+			
+			if (PadActivated != null)
+				PadActivated(padDescriptor, new EventArgs());
 		}
 		
 		public void HidePad(PadDescriptor padDescriptor)
