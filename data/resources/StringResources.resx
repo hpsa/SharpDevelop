@@ -4264,6 +4264,9 @@ Choose another file name or check if the directory exists and that
 you have write permission in that path and file. (maybe a write protection problem?)
 			</value>
   </data>
+  <data name="ICSharpCode.Services.MenuService.EmptyMenu" xml:space="preserve">
+    <value>(empty menu)</value>
+  </data>
   <data name="ICSharpCode.SharpDevelop.BrowserDisplayBinding.Browser" xml:space="preserve">
     <value>Browser</value>
   </data>

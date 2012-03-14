@@ -199,7 +199,7 @@ namespace ICSharpCode.Core.Presentation
 				}
 			}
 			if (addDummyEntryIfMenuEmpty && result.Count == 0) {
-				result.Add(new MenuItem { Header = "(empty menu)", IsEnabled = false });
+				result.Add(new MenuItem { Header = ResourceService.GetString("ICSharpCode.Services.MenuService.EmptyMenu"), IsEnabled = false });
 			}
 			return result;
 		}
