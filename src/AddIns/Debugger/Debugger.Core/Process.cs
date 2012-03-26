@@ -572,10 +572,21 @@ namespace Debugger
 		internal void SelectMostRecentStackFrameWithLoadedSymbols()
 		{
 			SelectSomeThread();
-			if (this.SelectedThread != null) {
+			SelectLatestStackFrame();
+		}
+		
+		/// <summary>
+		/// Selects the most recent stack frame which has symbols for the selected thread.
+		/// </summary>
+		public void SelectLatestStackFrame()
+		{
+			if (this.SelectedThread != null)
+			{
 				this.SelectedThread.SelectedStackFrame = null;
-				foreach (StackFrame stackFrame in this.SelectedThread.Callstack) {
-					if (stackFrame.HasSymbols) {
+				foreach (StackFrame stackFrame in this.SelectedThread.Callstack)
+				{
+					if (stackFrame.HasSymbols)
+					{
 						if (this.Options.StepOverDebuggerAttributes && stackFrame.MethodInfo.IsNonUserCode)
 							continue;
 						this.SelectedThread.SelectedStackFrame = stackFrame;

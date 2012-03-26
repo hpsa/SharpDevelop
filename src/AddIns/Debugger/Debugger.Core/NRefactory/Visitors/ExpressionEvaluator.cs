@@ -90,7 +90,7 @@ namespace ICSharpCode.NRefactory.Visitors
 		
 		public static Value Evaluate(INode code, StackFrame context)
 		{
-			if (context == null) throw new ArgumentNullException("context");
+			if (context == null) throw new GetValueException("Invalid context or thread");
 			if (context.IsInvalid) throw new DebuggerException("The context is no longer valid");
 			
 			TypedValue val = new ExpressionEvaluator(context).Evaluate(code, false);

@@ -111,6 +111,7 @@ namespace ICSharpCode.SharpDevelop.Gui.Pads
 					dynamic obj = runningThreadsList.SelectedItems[0];
 					Thread thread = (Thread)(obj.Tag);
 					debuggedProcess.SelectedThread = thread;
+					debuggedProcess.SelectLatestStackFrame();
 					debuggedProcess.OnPaused();
 				}
 			} else {
