@@ -257,6 +257,12 @@ namespace ICSharpCode.SharpDevelop.Project
 			
 			void OnWarning(object sender, BuildWarningEventArgs e)
 			{
+				// Ignore warning MSB3644: The reference assemblies for framework ".NETFramework,Version=v4.0" were not found...
+				if (e.Code == "MSB3644")
+				{
+					return;
+				}
+				
 				TaskService.BuildMessageViewCategory.AppendLine(e.Message);
 			}
 		}
