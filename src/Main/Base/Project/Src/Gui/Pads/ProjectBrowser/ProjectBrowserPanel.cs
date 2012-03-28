@@ -104,5 +104,10 @@ namespace ICSharpCode.SharpDevelop.Project
 		{
 			projectBrowserControl.SelectFile(fileName);
 		}
+		
+		public void SelectFile(IViewContent content)
+		{
+			projectBrowserControl.SelectFileNodeForView(content);
+		}
 	}
 }

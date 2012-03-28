@@ -350,5 +350,22 @@ namespace ICSharpCode.SharpDevelop.Project
 			return this;
 
 		}
+
+		/// <summary>
+		/// Default implementation of this method just compares the FileName properties.
+		/// Override this method to provide a specialized matching between content view and file node.
+		/// </summary>
+		/// <param name="view">The view to match against this file node. The default implementation requires that
+		/// the view has a PrimaryFileName not equal to null.</param>
+		/// <returns>True if the view matches the file node</returns>
+		public virtual bool IsViewRelatedToNode(IViewContent view)
+		{
+			if (view.PrimaryFileName == null)
+			{
+				return false;
+			}
+			// by default compare file names
+			return FileUtility.IsEqualFileName(FileName, view.PrimaryFileName);
+		}
 	}
 }

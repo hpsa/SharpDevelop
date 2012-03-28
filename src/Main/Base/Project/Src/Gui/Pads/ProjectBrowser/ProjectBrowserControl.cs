@@ -233,6 +233,79 @@ namespace ICSharpCode.SharpDevelop.Project
 			}
 		}
 		
+		/// <summary>
+		/// Selects the deepest node open for a particular file based view.
+		/// </summary>
+		public void SelectFileNodeForView(IViewContent content)
+		{
+			try
+			{
+				if (content.PrimaryFileName == null)
+				{
+				    return; // non file based views are not supported
+				}
+				string fileName = content.PrimaryFileName;
+				inSelectFile = true;
+				lastSelectionTarget = fileName;
+				TreeNode node = FindFileNodeForView(content);
+				
+				if (node != null)
+				{
+					// select first parent that is not collapsed
+					TreeNode nodeToSelect = node;
+					TreeNode p = node.Parent;
+					while (p != null)
+					{
+						if (!p.IsExpanded)
+						    nodeToSelect = p;
+						p = p.Parent;
+					}
+					if (nodeToSelect != null)
+					{
+						treeView.SelectedNode = nodeToSelect;
+					}
+				}
+				else
+				{
+					SelectDeepestOpenNodeForPath(fileName);
+				}
+			}
+			finally
+			{
+				inSelectFile = false;
+			}
+		}
+		
+		private TreeNode FindFileNodeForView(IViewContent content)
+		{
+			WorkbenchSingleton.AssertMainThread();
+			TreeNodeCollection nodes = treeView.Nodes;
+			return FindFileNodeForView(nodes, content);
+		}
+		
+		private static FileNode FindFileNodeForView(TreeNodeCollection nodes, IViewContent content)
+		{
+			FileNode fn;
+			foreach (TreeNode node in nodes)
+			{
+				fn = node as FileNode;
+				if (fn != null)
+				{
+					if(fn.IsViewRelatedToNode(content))
+					{
+						return fn;
+					}
+				}
+				if (node != null)
+				{
+					fn = FindFileNodeForView(node.Nodes, content);
+					if (fn != null)
+						return fn;
+				}
+			}
+			return null;
+		}
+		
 		public void SelectFileAndExpand(string fileName)
 		{
 			try {

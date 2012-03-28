@@ -171,7 +171,7 @@ namespace ICSharpCode.SharpDevelop.Project
 				if (!FileUtility.IsValidPath(fileName)) {
 					return;
 				}
-				projectBrowserPanel.SelectFile(fileName);
+				projectBrowserPanel.SelectFile(content);
 			}
 		}
 		
