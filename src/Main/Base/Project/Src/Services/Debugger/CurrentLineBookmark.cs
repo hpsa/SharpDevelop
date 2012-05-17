@@ -87,7 +87,7 @@ namespace ICSharpCode.SharpDevelop.Debugging
 		protected override ITextMarker CreateMarker(ITextMarkerService markerService)
 		{
 			IDocumentLine line = this.Document.GetLine(startLine);
-			ITextMarker marker = markerService.Create(line.Offset + startColumn - 1, Math.Max(endColumn - startColumn, 1));
+            ITextMarker marker = markerService.Create(line.Offset, line.Length);
 			marker.BackgroundColor = Colors.Yellow;
 			marker.ForegroundColor = Colors.Blue;
 			return marker;

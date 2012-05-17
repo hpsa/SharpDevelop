@@ -289,7 +289,11 @@ namespace ICSharpCode.Core
 					iconobj = localIcons[name];
 				} else {
 					foreach (ResourceManager resourceManger in localIconsResMgrs) {
-						iconobj = resourceManger.GetObject(name);
+						try {
+							iconobj = resourceManger.GetObject(name);
+						}
+						catch (Exception) { }
+
 						if (iconobj != null) {
 							break;
 						}
