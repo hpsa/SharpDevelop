@@ -8626,4 +8626,10 @@ a line break</value>
     <value>An unexpected error occurred when loading property:"{0}". Details: {1}</value>
     <comment>Error message when loading property fail</comment>
   </data>
+  <data name="ICSharpCode.SharpDevelop.Commands.ProjectBrowser.SolutionNodeTemplate" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>  
+  <data name="Dialog.Options.IDEOptions.TextEditor.General.CheckForLineEndingIncosistancies" xml:space="preserve">
+    <value>Check for line ending inconsistancies</value>
+  </data>
 </root>
