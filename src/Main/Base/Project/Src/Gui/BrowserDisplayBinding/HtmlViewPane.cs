@@ -208,7 +208,7 @@ namespace ICSharpCode.SharpDevelop.BrowserDisplayBinding
 		public void Navigate(Uri url)
 		{
 			try {
-				webBrowser.Navigate(url);
+				webBrowser.Navigate(url.AbsoluteUri);
 			} catch (Exception ex) {
 				LoggingService.Warn("Error navigating to " + url.ToString(), ex);
 			}
