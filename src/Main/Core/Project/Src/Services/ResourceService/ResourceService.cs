@@ -133,9 +133,11 @@ namespace ICSharpCode.Core
 		public static void RegisterStrings(string baseResourceName, Assembly assembly)
 		{
 			RegisterNeutralStrings(new ResourceManager(baseResourceName, assembly));
-			ResourceAssembly ra = new ResourceAssembly(assembly, baseResourceName, false);
-			resourceAssemblies.Add(ra);
-			ra.Load();
+			//Gil Edri: commenting out these lines in order to improve performance on localized env. 
+			//          since this is not needed with the way we do localization (usign satellite assemblies)
+			//ResourceAssembly ra = new ResourceAssembly(assembly, baseResourceName, false);
+			//resourceAssemblies.Add(ra);
+			//ra.Load();
 		}
 		
 		public static void RegisterNeutralStrings(ResourceManager stringManager)
@@ -152,9 +154,11 @@ namespace ICSharpCode.Core
 		public static void RegisterImages(string baseResourceName, Assembly assembly)
 		{
 			RegisterNeutralImages(new ResourceManager(baseResourceName, assembly));
-			ResourceAssembly ra = new ResourceAssembly(assembly, baseResourceName, true);
-			resourceAssemblies.Add(ra);
-			ra.Load();
+			//Gil Edri: commenting out these lines in order to improve performance on localized env. 
+			//          since this is not needed with the way we do localization (usign satellite assemblies)
+			//ResourceAssembly ra = new ResourceAssembly(assembly, baseResourceName, true);
+			//resourceAssemblies.Add(ra);
+			//ra.Load();
 		}
 		
 		public static void RegisterNeutralImages(ResourceManager imageManager)
