@@ -151,6 +151,11 @@
     <Compile Include="Process.cs" />
     <Compile Include="ProcessCollection.cs" />
     <Compile Include="ProcessEventArgs.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="SourcecodeSegment.cs" />
     <Compile Include="StackFrame.cs" />
     <Compile Include="Stepper.cs" />
@@ -208,6 +213,12 @@
       <Name>NRefactory</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
 </Project>

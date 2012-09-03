@@ -10,6 +10,7 @@ using Debugger.MetaData;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory.PrettyPrinter;
 using ICSharpCode.NRefactory.Visitors;
+using Debugger.Properties;
 
 namespace ICSharpCode.NRefactory.Ast
 {
@@ -249,7 +250,7 @@ namespace ICSharpCode.NRefactory.Ast
 				newRef.RankSpecifier = typeRef.RankSpecifier;
 				return newRef;
 			} else {
-				throw new EvaluateException(expr, "Type expected. {0} seen.", expr.GetType().FullName);
+                throw new EvaluateException(expr, Resource.TypeExpectedSeen, expr.GetType().FullName);
 			}
 		}
 		
@@ -318,7 +319,7 @@ namespace ICSharpCode.NRefactory.Ast
 			}
 			
 			if (type == null)
-				throw new GetValueException("Can not resolve " + typeRef.PrettyPrint());
+                throw new GetValueException(Resource.CantResolve, typeRef.PrettyPrint());
 			
 			for(int i = 0; i < typeRef.PointerNestingLevel; i++) {
 				type = (DebugType)type.MakePointerType();

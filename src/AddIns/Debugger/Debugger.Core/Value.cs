@@ -8,6 +8,7 @@ using System.Reflection;
 using Debugger.Interop.CorDebug;
 using Debugger.MetaData;
 using System.Runtime.InteropServices;
+using Debugger.Properties;
 
 namespace Debugger
 {
@@ -42,7 +43,7 @@ namespace Debugger
 		public ICorDebugValue CorValue {
 			get {
 				if (this.IsInvalid)
-					throw new GetValueException("Value is no longer valid");
+                    throw new GetValueException(Resource.ValueIsNoLongerValid);
 				return corValue;
 			}
 		}
@@ -50,7 +51,7 @@ namespace Debugger
 		[Debugger.Tests.Ignore]
 		public ICorDebugReferenceValue CorReferenceValue {
 			get {
-				if (IsNull) throw new GetValueException("Value is null");
+                if (IsNull) throw new GetValueException(Resource.ValueIsNull);
 				
 				if (!(this.CorValue is ICorDebugReferenceValue))
 					throw new DebuggerException("Reference value expected");
@@ -62,7 +63,7 @@ namespace Debugger
 		[Debugger.Tests.Ignore]
 		public ICorDebugGenericValue CorGenericValue {
 			get {
-				if (IsNull) throw new GetValueException("Value is null");
+                if (IsNull) throw new GetValueException(Resource.ValueIsNull);
 				
 				ICorDebugValue corValue = this.CorValue;
 				// Dereference and unbox if necessary
@@ -79,7 +80,7 @@ namespace Debugger
 		[Debugger.Tests.Ignore]
 		public ICorDebugArrayValue CorArrayValue {
 			get {
-				if (IsNull) throw new GetValueException("Value is null");
+                if (IsNull) throw new GetValueException(Resource.ValueIsNull);
 				
 				if (!this.Type.IsArray) throw new DebuggerException("Value is not an array");
 				
@@ -90,7 +91,7 @@ namespace Debugger
 		[Debugger.Tests.Ignore]
 		public ICorDebugObjectValue CorObjectValue {
 			get {
-				if (IsNull) throw new GetValueException("Value is null");
+                if (IsNull) throw new GetValueException(Resource.ValueIsNull);
 				
 				ICorDebugValue corValue = this.CorValue;
 				// Dereference and unbox if necessary
@@ -361,10 +362,10 @@ namespace Debugger
 		ICorDebugValue GetCorValueOfArrayElement(int[] indices)
 		{
 			if (indices.Length != ArrayRank) {
-				throw new GetValueException("Given indicies do not have the same dimension as array.");
+                throw new GetValueException(Resource.GivenIndiciesdotHaveSameDimensionAsArray);
 			}
 			if (!this.ArrayDimensions.IsIndexValid(indices)) {
-				throw new GetValueException("Given indices are out of range of the array");
+                throw new GetValueException(Resource.GivenIndicesAreOutOfRangeOfTheArray);
 			}
 			
 			return CorArrayValue.GetElement(indices);
@@ -402,10 +403,10 @@ namespace Debugger
 				if (objectInstance == null)
 					throw new DebuggerException("No target object specified");
 				if (objectInstance.IsNull)
-					throw new GetValueException("Null reference");
+                    throw new GetValueException(Resource.NullReference);
 				//if (!objectInstance.IsObject) // eg Array.Length can be called
 				if (!debugMemberInfo.DeclaringType.IsInstanceOfType(objectInstance))
-					throw new GetValueException("Object is not of type " + debugMemberInfo.DeclaringType.FullName);
+                    throw new GetValueException(Resource.ObjectIstOfType, debugMemberInfo.DeclaringType.FullName);
 			}
 		}
 		
@@ -435,7 +436,7 @@ namespace Debugger
 		{
 			if (memberInfo is FieldInfo) {
 				if (arguments.Length > 0)
-					throw new GetValueException("Arguments can not be used for a field");
+                    throw new GetValueException(Resource.ArgumentsCantBeUsedForAField);
 				return GetFieldValue(objectInstance, (FieldInfo)memberInfo);
 			} else if (memberInfo is PropertyInfo) {
 				return GetPropertyValue(objectInstance, (PropertyInfo)memberInfo, arguments);
@@ -459,7 +460,7 @@ namespace Debugger
 		{
 			Value val = GetFieldValue(objectInstance, fieldInfo);
 			if (!fieldInfo.FieldType.IsAssignableFrom(newValue.Type))
-				throw new GetValueException("Can not assign {0} to {1}", newValue.Type.FullName, fieldInfo.FieldType.FullName);
+                throw new GetValueException(Resource.CantAssign, newValue.Type.FullName, fieldInfo.FieldType.FullName);
 			val.SetValue(newValue);
 		}
 		
@@ -500,7 +501,7 @@ namespace Debugger
 					return objectInstance.CorObjectValue.GetFieldValue(((DebugType)fieldInfo.DeclaringType).CorType.GetClass(), (uint)fieldInfo.MetadataToken);
 				}
 			} catch (COMException e) {
-				throw new GetValueException("Can not get value of field", e);
+                throw new GetValueException(Resource.CantGetValueOfField, e);
 			}
 		}
 		
@@ -542,8 +543,8 @@ namespace Debugger
 		public static Value GetPropertyValue(Value objectInstance, PropertyInfo propertyInfo, params Value[] arguments)
 		{
 			CheckObject(objectInstance, propertyInfo);
-			
-			if (propertyInfo.GetGetMethod() == null) throw new GetValueException("Property does not have a get method");
+
+            if (propertyInfo.GetGetMethod() == null) throw new GetValueException(Resource.PropertyDoestHaveAGetMethod);
 			
 			Value val = Value.InvokeMethod(objectInstance, (DebugMethodInfo)propertyInfo.GetGetMethod(), arguments);
 			
@@ -576,8 +577,8 @@ namespace Debugger
 		public static Value SetPropertyValue(Value objectInstance, PropertyInfo propertyInfo, Value[] arguments, Value newValue)
 		{
 			CheckObject(objectInstance, propertyInfo);
-			
-			if (propertyInfo.GetSetMethod() == null) throw new GetValueException("Property does not have a set method");
+
+            if (propertyInfo.GetSetMethod() == null) throw new GetValueException(Resource.PropertyDoestHaveAGetMethod);
 			
 			arguments = arguments ?? new Value[0];
 			

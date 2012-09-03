@@ -10,6 +10,7 @@ using System.Text;
 using Debugger;
 using Debugger.MetaData;
 using ICSharpCode.NRefactory.Ast;
+using Debugger.Properties;
 
 namespace ICSharpCode.NRefactory.Visitors
 {
@@ -64,7 +65,7 @@ namespace ICSharpCode.NRefactory.Visitors
 				throw new GetValueException(parser.Errors.ErrorOutput);
 			}
 			if (parser.SnippetType != SnippetType.Expression && parser.SnippetType != SnippetType.Statements) {
-				throw new GetValueException("Code must be expression or statement");
+                throw new GetValueException(Resource.CodeMustBeExpressionOrStatement);
 			}
 			return astRoot;
 		}
@@ -84,13 +85,13 @@ namespace ICSharpCode.NRefactory.Visitors
 				return Evaluate(code, context.SelectedThread.MostRecentStackFrame);
 			} else {
 				// This can happen when needed 'dll' is missing.  This causes an exception dialog to be shown even before the applicaiton starts
-				throw new GetValueException("Can not evaluate because the process has no managed stack frames");
+                throw new GetValueException(Resource.CantEvaluateProcessHasNoManagedStack);
 			}
 		}
 		
 		public static Value Evaluate(INode code, StackFrame context)
 		{
-			if (context == null) throw new GetValueException("Invalid context or thread");
+            if (context == null) throw new GetValueException(Resource.InvalidContextOrThread);
 			if (context.IsInvalid) throw new DebuggerException("The context is no longer valid");
 			
 			TypedValue val = new ExpressionEvaluator(context).Evaluate(code, false);
@@ -111,7 +112,7 @@ namespace ICSharpCode.NRefactory.Visitors
 			}
 			Expression astExpression = astRoot as Expression;
 			if (astExpression == null) {
-				throw new GetValueException("Code must be expression");
+                throw new GetValueException(Resource.CodeMustBeExpression);
 			}
 			return astExpression;
 		}
@@ -213,7 +214,7 @@ namespace ICSharpCode.NRefactory.Visitors
 			if (expression is PrimitiveExpression) {
 				int? i = ((PrimitiveExpression)expression).Value as int?;
 				if (i == null)
-					throw new EvaluateException(expression, "Integer expected");
+                    throw new EvaluateException(expression, Resource.IntegerExpected);
 				return i.Value;
 			} else {
 				TypedValue typedVal = Evaluate(expression);
@@ -221,7 +222,7 @@ namespace ICSharpCode.NRefactory.Visitors
 					int i = (int)Convert.ChangeType(typedVal.PrimitiveValue, typeof(int));
 					return i;
 				} else {
-					throw new EvaluateException(expression, "Integer expected");
+                    throw new EvaluateException(expression, Resource.IntegerExpected);
 				}
 			}
 		}
@@ -232,16 +233,16 @@ namespace ICSharpCode.NRefactory.Visitors
 			if (val.Type == type)
 				return val;
 			if (!val.Type.CanImplicitelyConvertTo(type))
-				throw new EvaluateException(expression, "Can not implicitely cast {0} to {1}", val.Type.FullName, type.FullName);
+                throw new EvaluateException(expression, Resource.CantImplicitelyCast, val.Type.FullName, type.FullName);
 			if (type.IsPrimitive) {
 				object oldVal = val.PrimitiveValue;
 				object newVal;
 				try {
 					newVal = Convert.ChangeType(oldVal, type.PrimitiveType);
 				} catch (InvalidCastException) {
-					throw new EvaluateException(expression, "Can not cast {0} to {1}", val.GetType().FullName, type.FullName);
+                    throw new EvaluateException(expression, Resource.CantCast, val.GetType().FullName, type.FullName);
 				} catch (OverflowException) {
-					throw new EvaluateException(expression, "Overflow");
+                    throw new EvaluateException(expression, Resource.Overflow);
 				}
 				return CreateValue(newVal);
 			} else {
@@ -291,7 +292,7 @@ namespace ICSharpCode.NRefactory.Visitors
 				case AssignmentOperatorType.BitwiseAnd:    op = BinaryOperatorType.BitwiseAnd; break;
 				case AssignmentOperatorType.BitwiseOr:     op = BinaryOperatorType.BitwiseOr; break;
 				case AssignmentOperatorType.Power:         op = BinaryOperatorType.Power; break;
-				default: throw new GetValueException("Unknown operator " + assignmentExpression.Op);
+                default: throw new GetValueException(Resource.UnknownOperator, assignmentExpression.Op);
 			}
 			
 			TypedValue right;
@@ -310,10 +311,10 @@ namespace ICSharpCode.NRefactory.Visitors
 			
 			if (left == null) {
 				// Can this happen?
-				throw new GetValueException(string.Format("\"{0}\" can not be set", assignmentExpression.Left.PrettyPrint()));
+                throw new GetValueException(string.Format(Resource.CantBeSet, assignmentExpression.Left.PrettyPrint()));
 			}
 			if (!left.Value.IsReference && left.Type.FullName != right.Type.FullName) {
-				throw new GetValueException(string.Format("Type {0} expected, {1} seen", left.Type.FullName, right.Type.FullName));
+                throw new GetValueException(string.Format(Resource.TypeExpected, left.Type.FullName, right.Type.FullName));
 			}
 			left.Value.SetValue(right.Value);
 			return right;
@@ -348,14 +349,14 @@ namespace ICSharpCode.NRefactory.Visitors
 				try {
 					newVal = Convert.ChangeType(oldVal, castTo.PrimitiveType);
 				} catch (InvalidCastException) {
-					throw new EvaluateException(castExpression, "Can not cast {0} to {1}", val.Type.FullName, castTo.FullName);
+                    throw new EvaluateException(castExpression, Resource.CantCast, val.Type.FullName, castTo.FullName);
 				} catch (OverflowException) {
-					throw new EvaluateException(castExpression, "Overflow");
+					throw new EvaluateException(castExpression, Resource.Overflow);
 				}
 				val = CreateValue(newVal);
 			}
 			if (!castTo.IsAssignableFrom(val.Value.Type) && !val.Value.IsNull)
-				throw new GetValueException("Can not cast {0} to {1}", val.Value.Type.FullName, castTo.FullName);
+                throw new GetValueException(Resource.CantCast, val.Value.Type.FullName, castTo.FullName);
 			return new TypedValue(val.Value, castTo);
 		}
 		
@@ -370,7 +371,7 @@ namespace ICSharpCode.NRefactory.Visitors
 						DebugType.CreateFromType(context.AppDomain.Mscorlib, typeof(System.Exception))
 					);
 				} else {
-					throw new GetValueException("No current exception");
+                    throw new GetValueException(Resource.NoCurrentException);
 				}
 			}
 			
@@ -397,8 +398,8 @@ namespace ICSharpCode.NRefactory.Visitors
 				if (statMember != null)
 					return new TypedValue(Value.GetMemberValue(null, (MemberInfo)statMember), statMember.MemberType);
 			}
-			
-			throw new GetValueException("Identifier \"" + identifier + "\" not found in this context");
+
+            throw new GetValueException(Resource.IdentifierNotFound,identifier);
 		}
 		
 		public override object VisitIndexerExpression(IndexerExpression indexerExpression, object data)
@@ -416,18 +417,18 @@ namespace ICSharpCode.NRefactory.Visitors
 				);
 			} else if (target.Type.FullName == typeof(string).FullName) {
 				if (indexerExpression.Indexes.Count != 1)
-					throw new GetValueException("Single index expected");
+                    throw new GetValueException(Resource.SingleIndexExpected);
 				
 				int index = EvaluateAsInt(indexerExpression.Indexes[0]);
 				string str = (string)target.PrimitiveValue;
 				if (index < 0 || index >= str.Length)
-					throw new GetValueException("Index was outside the bounds of the array.");
+                    throw new GetValueException(Resource.IndexWasOutsideTheBoundsOfTheArray);
 				return CreateValue(str[index]);
 			} else {
 				List<TypedValue> indexes = EvaluateAll(indexerExpression.Indexes);
 				DebugPropertyInfo pi = (DebugPropertyInfo)target.Type.GetProperty("Item", GetTypes(indexes));
 				if (pi == null)
-					throw new GetValueException("The object does not have an indexer property");
+                    throw new GetValueException(Resource.TheObjectDoestHaveIndexerProperty);
 				return new TypedValue(
 					target.Value.GetPropertyValue(pi, GetValues(indexes)),
 					(DebugType)pi.PropertyType
@@ -460,13 +461,13 @@ namespace ICSharpCode.NRefactory.Visitors
 					targetType = target.Type;
 					methodName = ident.Identifier;
 				} else {
-					throw new GetValueException("Member reference expected for method invocation");
+                    throw new GetValueException(Resource.MemberReferenceExpected);
 				}
 			}
 			List<TypedValue> args = EvaluateAll(invocationExpression.Arguments);
 			MethodInfo method = targetType.GetMethod(methodName, DebugType.BindingFlagsAllInScope, null, GetTypes(args), null);
 			if (method == null)
-				throw new GetValueException("Method " + methodName + " not found");
+				throw new GetValueException(Resource.MethodNotFound,methodName);
 			Value retVal = Value.InvokeMethod(target != null ? target.Value : null, method, GetValues(args));
 			if (retVal == null)
 				return null;
@@ -476,13 +477,13 @@ namespace ICSharpCode.NRefactory.Visitors
 		public override object VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression, object data)
 		{
 			if (!objectCreateExpression.ObjectInitializer.IsNull)
-				throw new EvaluateException(objectCreateExpression.ObjectInitializer, "Object initializers not supported");
+                throw new EvaluateException(objectCreateExpression.ObjectInitializer, Resource.ObjectInitializersNotSupported);
 			
 			DebugType type = objectCreateExpression.CreateType.ResolveType(context.AppDomain);
 			List<TypedValue> ctorArgs = EvaluateAll(objectCreateExpression.Parameters);
 			ConstructorInfo ctor = type.GetConstructor(BindingFlags.Default, null, CallingConventions.Any, GetTypes(ctorArgs), null);
 			if (ctor == null)
-				throw new EvaluateException(objectCreateExpression, "Constructor not found");
+                throw new EvaluateException(objectCreateExpression, Resource.ConstructorNotFound);
 			Value val = (Value)ctor.Invoke(GetValues(ctorArgs));
 			return new TypedValue(val, type);
 		}
@@ -490,7 +491,7 @@ namespace ICSharpCode.NRefactory.Visitors
 		public override object VisitArrayCreateExpression(ArrayCreateExpression arrayCreateExpression, object data)
 		{
 			if (arrayCreateExpression.CreateType.RankSpecifier[0] != 0)
-				throw new EvaluateException(arrayCreateExpression, "Multi-dimensional arrays are not suppored");
+                throw new EvaluateException(arrayCreateExpression, Resource.MultiDimensionalArraysAretSuppored);
 			
 			DebugType type = arrayCreateExpression.CreateType.ResolveType(context.AppDomain);
 			int length = 0;
@@ -503,7 +504,7 @@ namespace ICSharpCode.NRefactory.Visitors
 			if (!arrayCreateExpression.ArrayInitializer.IsNull) {
 				List<Expression> inits = arrayCreateExpression.ArrayInitializer.CreateExpressions;
 				if (inits.Count != length)
-					throw new EvaluateException(arrayCreateExpression, "Incorrect initializer length");
+                    throw new EvaluateException(arrayCreateExpression, Resource.IncorrectInitializerLength);
 				for(int i = 0; i < length; i++) {
 					TypedValue init = EvaluateAs(inits[i], (DebugType)type.GetElementType());
 					array.SetArrayElement(new int[] { i }, init.Value);
@@ -531,7 +532,7 @@ namespace ICSharpCode.NRefactory.Visitors
 			}
 			MemberInfo[] memberInfos = targetType.GetMember(memberReferenceExpression.MemberName, DebugType.BindingFlagsAllInScope);
 			if (memberInfos.Length == 0)
-				throw new GetValueException("Member \"" + memberReferenceExpression.MemberName + "\" not found");
+				throw new GetValueException(Resource.MemberNotFound, memberReferenceExpression.MemberName);
 			return new TypedValue(
 				Value.GetMemberValue(target != null ? target.Value : null, memberInfos[0]),
 				((IDebugMemberInfo)memberInfos[0]).MemberType
@@ -561,7 +562,7 @@ namespace ICSharpCode.NRefactory.Visitors
 		{
 			TypedValue thisValue = GetThisValue();
 			if (thisValue == null)
-				throw new GetValueException(context.MethodInfo.FullName + " is static method and does not have \"this\"");
+				throw new GetValueException(Resource.IsStaticMethod, context.MethodInfo.FullName);
 			return thisValue;
 		}
 		
@@ -574,12 +575,12 @@ namespace ICSharpCode.NRefactory.Visitors
 			
 			if (op == UnaryOperatorType.Dereference) {
 				if (!value.Type.IsPointer)
-					throw new GetValueException("Target object is not a pointer");
+                    throw new GetValueException(Resource.TargetObjectIstAPointer);
 				return new TypedValue(value.Value.Dereference(), (DebugType)value.Type.GetElementType());
 			}
 			
 			if (!value.Type.IsPrimitive)
-				throw new GetValueException("Primitive value expected");
+                throw new GetValueException(Resource.PrimitiveValueExpected);
 			
 			if (op == UnaryOperatorType.Decrement || op == UnaryOperatorType.PostDecrement ||
 			    op == UnaryOperatorType.Increment || op == UnaryOperatorType.PostIncrement)
@@ -640,8 +641,8 @@ namespace ICSharpCode.NRefactory.Visitors
 					}
 				}
 			}
-					
-			throw new EvaluateException(unaryOperatorExpression, "Can not use the unary operator {0} on type {1}", op.ToString(), value.Type.FullName);
+
+            throw new EvaluateException(unaryOperatorExpression, Resource.CantUseTheUnaryOperatorOnType, op.ToString(), value.Type.FullName);
 		}
 		
 		/// <summary>
@@ -819,8 +820,8 @@ namespace ICSharpCode.NRefactory.Visitors
 					}
 				}
 			}
-			
-			throw new EvaluateException(binaryOperatorExpression, "Can not use the binary operator {0} on types {1} and {2}", op.ToString(), left.Type.FullName, right.Type.FullName);
+
+            throw new EvaluateException(binaryOperatorExpression, Resource.CantuseTheBinaryOperatorOnTypes, op.ToString(), left.Type.FullName, right.Type.FullName);
 		}
 		
 		/// <summary>

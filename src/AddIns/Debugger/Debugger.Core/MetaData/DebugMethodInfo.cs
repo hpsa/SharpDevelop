@@ -12,6 +12,7 @@ using Debugger.Interop.CorDebug;
 using Debugger.Interop.CorSym;
 using Debugger.Interop.MetaData;
 using Mono.Cecil.Signatures;
+using Debugger.Properties;
 
 namespace Debugger.MetaData
 {
@@ -135,7 +136,7 @@ namespace Debugger.MetaData
 			}
 			if (this.IsSpecialName && this.Name == ".ctor") {
 				if (obj != null)
-					throw new GetValueException("'obj' must be null for constructor call");
+                    throw new GetValueException(Resource.ObjMustBeNull);
 				return Eval.NewObject(this, args.ToArray());
 			} else {
 				return Eval.InvokeMethod(this, (Value)obj, args.ToArray());
@@ -640,7 +641,7 @@ namespace Debugger.MetaData
 			try {
 				corVal = context.CorILFrame.GetLocalVariable((uint)symVar.GetAddressField1());
 			} catch (COMException e) {
-				if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException("Unavailable in optimized code");
+                if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException(Resource.UnavailableInOptimizedCode);
 				throw;
 			}
 			return new Value(context.AppDomain, corVal);

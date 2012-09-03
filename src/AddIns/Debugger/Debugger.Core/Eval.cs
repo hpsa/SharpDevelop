@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 
 using Debugger.MetaData;
 using Debugger.Interop.CorDebug;
+using Debugger.Properties;
 
 namespace Debugger
 {
@@ -58,11 +59,11 @@ namespace Debugger
 	    public Value Result {
 			get {
 				switch(this.State) {
-					case EvalState.Evaluating:            throw new GetValueException("Evaluating...");
+					case EvalState.Evaluating:            throw new GetValueException(Resource.Evaluating);
 					case EvalState.EvaluatedSuccessfully: return result;
 					case EvalState.EvaluatedException:    return result;
 					case EvalState.EvaluatedNoResult:     return null;
-					case EvalState.EvaluatedTimeOut:      throw new GetValueException("Timeout");
+                    case EvalState.EvaluatedTimeOut: throw new GetValueException(Resource.Timeout);
 					default: throw new DebuggerException("Unknown state");
 				}
 			}
@@ -94,23 +95,23 @@ namespace Debugger
 				evalStarter(this);
 			} catch (COMException e) {
 				if ((uint)e.ErrorCode == 0x80131C26) {
-					throw new GetValueException("Can not evaluate in optimized code");
+                    throw new GetValueException(Resource.CantEvaluateOptimizedCode);
 				} else if ((uint)e.ErrorCode == 0x80131C28) {
-					throw new GetValueException("Object is in wrong AppDomain");
+                    throw new GetValueException(Resource.ObjectInWrongAppDomain);
 				} else if ((uint)e.ErrorCode == 0x8013130A) {
 					// Happens on getting of Sytem.Threading.Thread.ManagedThreadId; See SD2-1116
-					throw new GetValueException("Function does not have IL code");
+                    throw new GetValueException(Resource.FunctionDoestHaveILCode);
 				} else if ((uint)e.ErrorCode == 0x80131C23) {
 					// The operation failed because it is a GC unsafe point. (Exception from HRESULT: 0x80131C23)
 					// This can probably happen when we break and the thread is in native code
-					throw new GetValueException("Thread is in GC unsafe point");
+                    throw new GetValueException(Resource.ThreadIsGCUnsafePoint);
 				} else if ((uint)e.ErrorCode == 0x80131C22) {
 					// The operation is illegal because of a stack overflow.
-					throw new GetValueException("Can not evaluate after stack overflow");
+                    throw new GetValueException(Resource.CantEvaluateAfterStackOverflow);
 				} else if ((uint)e.ErrorCode == 0x80131313) {
 					// Func eval cannot work. Bad starting point.
 					// Reproduction circumstancess are unknown
-					throw new GetValueException("Func eval cannot work. Bad starting point.");
+                    throw new GetValueException(Resource.FuncEvalcantWork);
 				} else {
 					#if DEBUG
 						throw; // Expose for more diagnostics
@@ -143,8 +144,8 @@ namespace Debugger
 					return t;
 				}
 			}
-			
-			throw new GetValueException("No suitable thread for evaluation");
+
+            throw new GetValueException(Resource.NoSuitableThreadForEvaluation);
 		}
 
 		internal bool IsCorEval(ICorDebugEval corEval)
@@ -177,7 +178,7 @@ namespace Debugger
 				process.AssertPaused();
 				return this.Result;
 			} catch (ProcessExitedException) {
-				throw new GetValueException("Process exited");
+                throw new GetValueException(Resource.ProcessExited);
 			}
 		}
 		
@@ -226,19 +227,16 @@ namespace Debugger
 			List<ICorDebugValue> corArgs = new List<ICorDebugValue>();
 			args = args ?? new Value[0];
 			if (args.Length != method.ParameterCount) {
-				throw new GetValueException("Invalid parameter count");
+                throw new GetValueException(Resource.InvalidParameterCount);
 			}
 			if (!method.IsStatic) {
 				if (thisValue == null)
-					throw new GetValueException("'this' is null");
+                    throw new GetValueException(Resource.ThisIsNull);
 				if (thisValue.IsNull)
-					throw new GetValueException("Null reference");
+					throw new GetValueException(Resource.NullReference);
 				// if (!(thisValue.IsObject)) // eg Can evaluate on array
 				if (!method.DeclaringType.IsInstanceOfType(thisValue)) {
-					throw new GetValueException(
-						"Can not evaluate because the object is not of proper type.  " + 
-						"Expected: " + method.DeclaringType.FullName + "  Seen: " + thisValue.Type.FullName
-					);
+					throw new GetValueException(Resource.CantEvaluateObjectNotProperType,method.DeclaringType.FullName,thisValue.Type.FullName);
 				}
 				corArgs.Add(thisValue.CorValue);
 			}
@@ -246,7 +244,7 @@ namespace Debugger
 				Value arg = args[i];
 				DebugType paramType = (DebugType)method.GetParameters()[i].ParameterType;
 				if (!arg.Type.CanImplicitelyConvertTo(paramType))
-					throw new GetValueException("Inncorrect parameter type");
+                    throw new GetValueException(Resource.InncorrectParameterType);
 				// Implicitely convert to correct primitve type
 				if (paramType.IsPrimitive && args[i].Type != paramType) {
 					object oldPrimVal = arg.PrimitiveValue;

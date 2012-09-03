@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Debugger.MetaData;
 using Debugger.Interop.CorDebug;
 using Debugger.Interop.MetaData;
+using Debugger.Properties;
 
 namespace Debugger
 {
@@ -290,13 +291,13 @@ namespace Debugger
 		
 		ICorDebugValue GetThisCorValue()
 		{
-			if (this.MethodInfo.IsStatic) throw new GetValueException("Static method does not have 'this'.");
+            if (this.MethodInfo.IsStatic) throw new GetValueException(Resource.StaticMethodDoestHaveThis);
 			ICorDebugValue corValue;
 			try {
 				corValue = CorILFrame.GetArgument(0);
 			} catch (COMException e) {
 				// System.Runtime.InteropServices.COMException (0x80131304): An IL variable is not available at the current native IP. (See Forum-8640)
-				if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException("Not available in the current state");
+                if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException(Resource.NotAvailableInTheCurrentState);
 				throw;
 			}
 			// This can be 'by ref' for value types
@@ -342,7 +343,7 @@ namespace Debugger
 				// Non-static methods include 'this' as first argument
 				corValue = CorILFrame.GetArgument((uint)(this.MethodInfo.IsStatic? index : (index + 1)));
 			} catch (COMException e) {
-				if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException("Unavailable in optimized code");
+				if ((uint)e.ErrorCode == 0x80131304) throw new GetValueException(Resource.UnavailableInOptimizedCode);
 				throw;
 			}
 			// Method arguments can be passed 'by ref'
@@ -353,7 +354,7 @@ namespace Debugger
 					if ((uint)e.ErrorCode == 0x80131305) {
 						// A reference value was found to be bad during dereferencing.
 						// This can sometimes happen after a stack overflow
-						throw new GetValueException("Bad reference");
+                        throw new GetValueException(Resource.BadReference);
 					} else {
 						throw;
 					}

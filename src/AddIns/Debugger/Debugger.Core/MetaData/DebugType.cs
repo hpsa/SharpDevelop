@@ -11,6 +11,7 @@ using Debugger.Interop.CorDebug;
 using Debugger.Interop.MetaData;
 using ICSharpCode.NRefactory.Ast;
 using Mono.Cecil.Signatures;
+using Debugger.Properties;
 
 namespace Debugger.MetaData
 {
@@ -384,11 +385,11 @@ namespace Debugger.MetaData
 					return candidates[0];
 				ParameterInfo[] pars = ((IOverloadable)candidates[0]).GetParameters();
 				if (pars.Length != argumentTypes.Length)
-					throw new GetValueException("Incorrect parameter count");
+                    throw new GetValueException(Resource.IncorrectParameterCount);
 				for(int i = 0; i < pars.Length; i++) {
 					ParameterInfo par = pars[i];
 					if (!((DebugType)argumentTypes[i]).CanImplicitelyConvertTo(par.ParameterType))
-						throw new GetValueException("Incorrect parameter type for '{0}'. Excpeted {1}, seen {2}", par.Name, par.ParameterType.FullName, argumentTypes[i]);
+                        throw new GetValueException(Resource.IncorrectParameterType, par.Name, par.ParameterType.FullName, argumentTypes[i]);
 				}
 				return candidates[0];
 			}
@@ -402,7 +403,7 @@ namespace Debugger.MetaData
 					return candidate;
 			}
 			if (applicable.Count == 0) {
-				throw new GetValueException("No applicable overload found");
+                throw new GetValueException(Resource.NoApplicableOverloadFound);
 			} else if (applicable.Count == 1) {
 				return applicable[0];
 			} else {
@@ -423,7 +424,7 @@ namespace Debugger.MetaData
 					overloads.Append("  ");
 					overloads.Append(app.ToString());
 				}
-				throw new GetValueException("More then one applicable overload found:" + overloads.ToString());
+                throw new GetValueException(Resource.MoreThenOneApplicableOverloadFound, overloads.ToString());
 			}
 		}
 		
