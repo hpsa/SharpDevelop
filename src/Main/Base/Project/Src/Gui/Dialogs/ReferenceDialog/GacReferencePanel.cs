@@ -53,7 +53,7 @@ namespace ICSharpCode.SharpDevelop.Gui
 		Button searchButton;
 		ToolTip toolTip = new ToolTip();
 		ToolTip filterTextboxToolTip = new ToolTip();
-		ToolTip chooseSpecificVersionTooltip = new ToolTip();
+        ToolTip chooseSpecificVersionTooltip = new ToolTip();
 		ISelectReferenceDialog selectDialog;
 		ColumnSorter sorter;
 		BackgroundWorker worker;
@@ -90,13 +90,13 @@ namespace ICSharpCode.SharpDevelop.Gui
 			this.Dock = DockStyle.Fill;
 			this.Controls.Add(listView);
 			
-			Panel upperPanel = new Panel { Dock = DockStyle.Top, Height = 20 };
+			Panel upperPanel = new Panel { Dock = DockStyle.Top, Height = 23 };
 			
 			chooseSpecificVersionCheckBox = new CheckBox();
 			chooseSpecificVersionCheckBox.Dock = DockStyle.Left;
 			chooseSpecificVersionCheckBox.AutoSize = true;
 			chooseSpecificVersionCheckBox.Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersion}");
-			chooseSpecificVersionTooltip.SetToolTip(chooseSpecificVersionCheckBox, StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersionTooltip}"));
+            chooseSpecificVersionTooltip.SetToolTip(chooseSpecificVersionCheckBox, StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.ChooseSpecificAssemblyVersionTooltip}"));
 			
 			chooseSpecificVersionCheckBox.CheckedChanged += delegate {
 				listView.Items.Clear();
@@ -106,10 +106,10 @@ namespace ICSharpCode.SharpDevelop.Gui
 					listView.Items.AddRange(shortItemList);
 			};
 			
-			filterTextBox = new TextBox { Width = 100, Dock = DockStyle.Right };
-			searchButton = new Button { Dock = DockStyle.Right, Width = 50, Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}") };
+			filterTextBox = new TextBox { Width = 100, Dock = DockStyle.Right, AutoSize = false, Height = 23 };
+            searchButton = new Button { Dock = DockStyle.Right, Width = 75, Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}") };
 			toolTip.SetToolTip(searchButton, searchButton.Text);
-			filterTextboxToolTip.SetToolTip(filterTextBox, StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.filterTextBox}"));
+            filterTextboxToolTip.SetToolTip(filterTextBox, StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.filterTextBox}"));
 			searchButton.Click += searchButton_Click;
 			upperPanel.Controls.Add(chooseSpecificVersionCheckBox);
 			upperPanel.Controls.Add(filterTextBox);
@@ -144,11 +144,11 @@ namespace ICSharpCode.SharpDevelop.Gui
 			if(!worker.IsBusy) {			
 				filterTextBox.ReadOnly = true;
 				worker.RunWorkerAsync();
-				text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.cancelButton}");
+                text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.cancelButton}");
 			}
 			else {
 				worker.CancelAsync();
-				text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}");
+                text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}");
 				filterTextBox.ReadOnly = false;
 			}
 			searchButton.Text = text;
@@ -161,8 +161,8 @@ namespace ICSharpCode.SharpDevelop.Gui
 				// avoid crash when dialog is closed before search is completed
 				return;
 			}
-			searchButton.Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}"); 
-			this.toolTip.SetToolTip(searchButton, searchButton.Text);
+            searchButton.Text = StringParser.Parse("${res:Dialog.SelectReferenceDialog.GacReferencePanel.searchButton}"); 
+            this.toolTip.SetToolTip(searchButton, searchButton.Text);
 			filterTextBox.ReadOnly = false;
 			if (resultList != null && resultList.Count > 0) {
 				listView.Items.Clear();				
